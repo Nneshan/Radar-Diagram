@@ -3,6 +3,7 @@ import numpy as np
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from sympy.printing.pretty.pretty_symbology import line_width
 
 FACTIONS = ["Война", "Разрушение", "Магия", "Порядок", "Могущество", "Машины"]
 
@@ -23,6 +24,7 @@ def draw_faction(name):
     ax.clear()
 
     values = FACTION_STATS[name].copy()
+    color = FACTION_COLORS[name]
 
     angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
 
@@ -32,8 +34,8 @@ def draw_faction(name):
     ax.set_xticks(angles[:-1])
     ax.set_xticklabels(labels)
 
-    ax.plot(angles, values)
-    ax.fill(angles, values, alpha=0.25)
+    ax.plot(angles, values, color=color, linewidth=2)
+    ax.fill(angles, values, color=color, alpha=0.25)
 
     ax.set_ylim(0, 10)
 
@@ -67,6 +69,15 @@ FACTION_STATS = {
     "Порядок": [4, 8, 4, 6, 8, 6],
     "Могущество": [5, 2, 5, 9, 4, 8],
     "Машины": [6, 5, 8, 6, 8, 7]
+}
+
+FACTION_COLORS = {
+    "Война": "#C62828",
+    "Разрушение": "#EF6C00",
+    "Магия": "#00ACC1",
+    "Порядок": "#FDD835",
+    "Могущество": "#43A047",
+    "Машины": "#78909C"
 }
 
 canvas = FigureCanvasTkAgg(figure, master=root)
