@@ -3,11 +3,20 @@ import numpy as np
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from sympy.printing.pretty.pretty_symbology import line_width
 
 FACTIONS = ["Война", "Разрушение", "Магия", "Порядок", "Могущество", "Машины"]
 
+ICON_FILES = {
+    "Война": "War.png",
+    "Разрушение": "Destruction.png",
+    "Магия": "Magic.png",
+    "Порядок": "Order.png",
+    "Могущество": "Might.png",
+    "Машины": "Machines.png"
+}
+
 buttons = []
+icons = []
 
 def select_faction(index):
     # Снятие подсветки
@@ -52,8 +61,11 @@ top_frame.pack(pady=20)
 
 # Кнопки
 for i, faction in enumerate(FACTIONS):
-    button = tk.Button(top_frame, text=faction, width=12, command=lambda idx=i: select_faction(idx))
-    button.pack(side=tk.LEFT, padx=5)
+    icon = tk.PhotoImage(file=f"icons/{ICON_FILES[faction]}")
+    icons.append(icon)
+
+    button = tk.Button(top_frame, image=icon, command=lambda idx=i: select_faction(idx))
+    button.pack(side=tk.LEFT, padx=20)
     buttons.append(button)
 
 # График
