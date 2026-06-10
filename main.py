@@ -3,7 +3,6 @@ import numpy as np
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from sympy.abc import alpha
 
 FACTIONS = ["Война", "Разрушение", "Магия", "Порядок", "Могущество", "Машины"]
 
@@ -17,6 +16,28 @@ def select_faction(index):
     buttons[index].config(relief=tk.SUNKEN)
 
     print(f"Выбрана фракция: {FACTIONS[index]}")
+
+    draw_faction(FACTIONS[index])
+
+def draw_faction(name):
+    ax.clear()
+
+    values = FACTION_STATS[name].copy()
+
+    angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
+
+    values += values[:1]
+    angles += angles[:1]
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(labels)
+
+    ax.plot(angles, values)
+    ax.fill(angles, values, alpha=0.25)
+
+    ax.set_ylim(0, 10)
+
+    canvas.draw()
 
 # Окно
 root = tk.Tk()
@@ -39,24 +60,19 @@ ax = figure.add_subplot(111, polar=True)
 
 labels = ["Агрессия", "Контроль", "Гибкость", "Автономность", "Синергия", "Потенциал"]
 
-values = [9, 3, 4, 7, 5, 6]
-
-angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
-
-values += values[:1]
-angles += angles[:1]
-
-ax.set_xticks(angles[:-1])
-ax.set_xticklabels(labels)
-
-ax.plot(angles, values)
-ax.fill(angles, values, alpha=0.25)
-
-ax.set_ylim(0, 10)
+FACTION_STATS = {
+    "Война": [8, 3, 4, 9, 5, 6],
+    "Разрушение": [7, 2, 3, 8, 3, 9],
+    "Магия": [3, 9, 10, 2, 9, 7],
+    "Порядок": [4, 8, 4, 6, 8, 6],
+    "Могущество": [5, 2, 5, 9, 4, 8],
+    "Машины": [6, 5, 8, 6, 8, 7]
+}
 
 canvas = FigureCanvasTkAgg(figure, master=root)
-canvas.draw()
 canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
+draw_faction("Война")
 
 # Запуск
 root.mainloop()
